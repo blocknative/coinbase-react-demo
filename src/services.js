@@ -20,17 +20,24 @@ export function initOnboard(subscriptions) {
     subscriptions,
     walletSelect: {
       wallets: [
-        { walletName: 'metamask' },
+        // coinbase is mobile only
+        { walletName: 'coinbase' },
+        // walletLink is desktop support for Coinbase
+        { walletName: 'walletLink', rpcUrl },
+
+        {
+          walletName: 'ledger',
+          rpcUrl
+        },
+
         {
           walletName: 'trezor',
           appUrl: 'https://reactdemo.blocknative.com',
           email: 'aaron@blocknative.com',
           rpcUrl
         },
-        {
-          walletName: 'ledger',
-          rpcUrl
-        },
+        
+        { walletName: 'metamask' },
         {
           walletName: 'walletConnect',
           infuraKey: 'cea9deb6467748b0b81b920b005c10c1'
@@ -43,11 +50,6 @@ export function initOnboard(subscriptions) {
           appName: 'Onboard Demo',
           rpcUrl
         },
-
-        // coinbase is mobile only
-        { walletName: 'coinbase' },
-        // walletLink is desktop support for Coinbase
-        { walletName: 'walletLink', rpcUrl },
         
         { walletName: 'status' },
         {
