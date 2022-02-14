@@ -17,7 +17,7 @@ View live demo [here](https://reactdemo.blocknative.com/)!
 Clone the repo:
 
 ```bash
-git clone https://github.com/blocknative/react-demo.git
+git clone https://github.com/blocknative/coinbase-react-demo.git
 ```
 
 Navigate to the project directory:
