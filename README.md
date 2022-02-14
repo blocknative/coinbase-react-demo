@@ -23,7 +23,7 @@ git clone https://github.com/blocknative/coinbase-react-demo.git
 Navigate to the project directory:
 
 ```bash
-cd react-demo
+cd coinbase-react-demo
 ```
 
 Install the dependencies:
