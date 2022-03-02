@@ -1,105 +1,115 @@
-import stagingOnboard from 'bnc-onboard-staging'
 import stagingNotify from 'bnc-notify-staging'
 import Notify from 'bnc-notify'
-import Onboard from 'bnc-onboard'
+
+import blocknativeLogo from './icons/blocknative-logo'
+import blocknativeIcon from './icons/blocknative-icon'
+
+import { init } from '@web3-onboard/react'
+import injectedModule from '@web3-onboard/injected-wallets'
+import trezorModule from '@web3-onboard/trezor'
+import ledgerModule from '@web3-onboard/ledger'
+import walletConnectModule from '@web3-onboard/walletconnect'
+import walletLinkModule from '@web3-onboard/walletlink'
+import portisModule from '@web3-onboard/portis'
+import fortmaticModule from '@web3-onboard/fortmatic'
+import torusModule from '@web3-onboard/torus'
+import keepkeyModule from '@web3-onboard/keepkey'
+import gnosisModule from '@web3-onboard/gnosis'
+
+// Replace with your DApp's Infura ID
+const INFURA_ID = 'cea9deb6467748b0b81b920b005c10c1'
 
 const networkId = 4
-const rpcUrl = 'https://rinkeby.infura.io/v3/cea9deb6467748b0b81b920b005c10c1'
 const apiUrl = process.env.REACT_APP_API_URL
 const staging = process.env.REACT_APP_STAGING
 const dappId = '12153f55-f29e-4f11-aa07-90f10da5d778'
+const injected = injectedModule()
+const walletLink = walletLinkModule()
+const walletConnect = walletConnectModule()
 
-export function initOnboard(subscriptions) {
-  const onboard = staging ? stagingOnboard : Onboard
-  return onboard({
-    dappId,
-    hideBranding: false,
-    networkId,
-    apiUrl,
-    // darkMode: true,
-    subscriptions,
-    walletSelect: {
-      wallets: [
-        // coinbase is mobile only
-        { walletName: 'coinbase' },
-        // walletLink is desktop support for Coinbase
-        { walletName: 'walletLink', rpcUrl },
+const portis = portisModule({
+  apiKey: 'b2b7586f-2b1e-4c30-a7fb-c2d1533b153b'
+})
 
-        {
-          walletName: 'ledger',
-          rpcUrl
-        },
+const fortmatic = fortmaticModule({
+  apiKey: 'pk_test_886ADCAB855632AA'
+})
 
-        {
-          walletName: 'trezor',
-          appUrl: 'https://reactdemo.blocknative.com',
-          email: 'aaron@blocknative.com',
-          rpcUrl
-        },
-        
-        { walletName: 'metamask' },
-        {
-          walletName: 'walletConnect',
-          infuraKey: 'cea9deb6467748b0b81b920b005c10c1'
-        },
-        { walletName: 'cobovault', appName: 'React Demo', rpcUrl },
-        { walletName: 'keystone', appName: 'React Demo', rpcUrl },
-        { walletName: 'keepkey', rpcUrl },
-        {
-          walletName: 'lattice',
-          appName: 'Onboard Demo',
-          rpcUrl
-        },
-        
-        { walletName: 'status' },
-        {
-          walletName: 'portis',
-          apiKey: 'b2b7586f-2b1e-4c30-a7fb-c2d1533b153b'
-        },
-        { walletName: 'fortmatic', apiKey: 'pk_test_886ADCAB855632AA' },
-        { walletName: 'torus' },
-        { walletName: 'trust', rpcUrl },
-        { walletName: 'opera' },
-        { walletName: 'operaTouch' },
-        { walletName: 'imToken', rpcUrl },
-        { walletName: 'meetone' },
-        { walletName: 'mykey', rpcUrl },
-        { walletName: 'wallet.io', rpcUrl },
-        { walletName: 'huobiwallet', rpcUrl },
-        { walletName: 'alphawallet', rpcUrl },
-        { walletName: 'hyperpay' },
-        { walletName: 'atoken' },
-        { walletName: 'liquality' },
-        { walletName: 'frame' },
-        { walletName: 'tokenpocket', rpcUrl },
-        { walletName: 'authereum', disableNotifications: true },
-        { walletName: 'ownbit' },
-        { walletName: 'gnosis' },
-        { walletName: 'dcent' },
-        { walletName: 'bitpie' },
-        { walletName: 'xdefi' },
-        { walletName: 'binance' },
-        { walletName: 'tp' },
-        { walletName: 'tally' },
-        { walletName: 'blockwallet' },
-        { walletName: 'mathwallet' },
-        { walletName: '1inch' },
-        { walletName: 'tokenary' },
-        // Ronin now only works on Axie's domains and will open
-        // to be used by other domains when the Ronin chain is ready"
-        // Info on Ronin setup/localDev/testing https://github.com/blocknative/onboard/pull/757#issue-1071697485
-        // { walletName: 'ronin' }
-      ]
-    },
-    walletCheck: [
-      { checkName: 'derivationPath' },
-      { checkName: 'connect' },
-      { checkName: 'accounts' },
-      { checkName: 'network' },
-      { checkName: 'balance', minimumBalance: '100000' }
-    ]
-  })
+const torus = torusModule()
+const ledger = ledgerModule()
+const keepkey = keepkeyModule()
+
+const gnosis = gnosisModule()
+
+const trezorOptions = {
+  email: 'test@test.com',
+  appUrl: 'https://www.blocknative.com'
 }
+
+const trezor = trezorModule(trezorOptions)
+
+export const initWeb3Onboard = init({
+  wallets: [
+    injected,
+    ledger,
+    walletLink,
+    trezor,
+    walletConnect,
+    gnosis,
+    fortmatic,
+    keepkey,
+    portis,
+    torus
+  ],
+  chains: [
+    {
+      id: '0x1',
+      token: 'ETH',
+      label: 'Ethereum Mainnet',
+      rpcUrl: `https://mainnet.infura.io/v3/${INFURA_ID}`
+    },
+    {
+      id: '0x3',
+      token: 'tROP',
+      label: 'Ethereum Ropsten Testnet',
+      rpcUrl: `https://ropsten.infura.io/v3/${INFURA_ID}`
+    },
+    {
+      id: '0x4',
+      token: 'rETH',
+      label: 'Ethereum Rinkeby Testnet',
+      rpcUrl: `https://rinkeby.infura.io/v3/${INFURA_ID}`
+    },
+    {
+      id: '0x38',
+      token: 'BNB',
+      label: 'Binance Smart Chain',
+      rpcUrl: 'https://bsc-dataseed.binance.org/'
+    },
+    {
+      id: '0x89',
+      token: 'MATIC',
+      label: 'Matic Mainnet',
+      rpcUrl: 'https://matic-mainnet.chainstacklabs.com'
+    },
+    {
+      id: '0xfa',
+      token: 'FTM',
+      label: 'Fantom Mainnet',
+      rpcUrl: 'https://rpc.ftm.tools/'
+    }
+  ],
+  appMetadata: {
+    name: 'Blocknative Web3-Onboard',
+    icon: blocknativeIcon,
+    logo: blocknativeLogo,
+    description: 'Demo app for Web3-Onboard',
+    recommendedInjectedWallets: [
+      { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
+      { name: 'MetaMask', url: 'https://metamask.io' }
+    ]
+  }
+})
 
 export function initNotify() {
   const notify = staging ? stagingNotify : Notify
